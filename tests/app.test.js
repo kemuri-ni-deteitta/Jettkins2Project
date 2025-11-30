@@ -7,7 +7,7 @@ describe('App Tests', () => {
             const response = await request(app).get('/');
             expect(response.status).toBe(200);
             expect(response.text).toContain('DevOps Jenkins App');
-            expect(response.text).toContain('Привет из DevOps Jenkins!');
+            expect(response.text).toContain('CI/CD работает! Изменения применены автоматически!');
         });
     });
 

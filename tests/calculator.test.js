@@ -35,7 +35,7 @@ describe('Calculator Tests', () => {
     describe('getGreeting', () => {
         test('должна возвращать приветственное сообщение', () => {
             const greeting = getGreeting();
-            expect(greeting).toBe('Привет из DevOps Jenkins!');
+            expect(greeting).toBe('CI/CD работает! Изменения применены автоматически!');
             expect(typeof greeting).toBe('string');
         });
     });
