@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo 'Сборка Docker образа...'
+                    echo 'Building Docker image...'
                     sh "docker -H ${DOCKER_HOST} build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                     sh "docker -H ${DOCKER_HOST} tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                 }
@@ -21,7 +21,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo 'Запуск тестов в контейнере...'
+                    echo 'Running tests in container...'
                     sh """
                         docker -H ${DOCKER_HOST} run --rm ${DOCKER_IMAGE}:${DOCKER_TAG} npm test
                     """
@@ -29,7 +29,7 @@ pipeline {
             }
             post {
                 always {
-                    echo 'Тесты завершены'
+                    echo 'Tests completed'
                 }
             }
         }
@@ -37,11 +37,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo 'Остановка старого контейнера (если существует)...'
+                    echo 'Stopping old container (if exists)...'
                     sh "docker -H ${DOCKER_HOST} stop ${DOCKER_IMAGE}-deploy || true"
                     sh "docker -H ${DOCKER_HOST} rm ${DOCKER_IMAGE}-deploy || true"
                     
-                    echo 'Запуск контейнера в режиме работы...'
+                    echo 'Starting container in production mode...'
                     sh """
                         docker -H ${DOCKER_HOST} run -d \\
                             --name ${DOCKER_IMAGE}-deploy \\
@@ -55,10 +55,10 @@ pipeline {
     
     post {
         success {
-            echo 'Pipeline выполнен успешно!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline завершился с ошибкой!'
+            echo 'Pipeline failed!'
         }
     }
 }
