@@ -17,11 +17,15 @@ pipeline {
         script {
           echo 'Checking connection to docker-dind...'
           sh "docker -H ${DOCKER_HOST} version"
+          echo 'Checking files before build...'
+          sh "ls -la tests/ || echo 'Tests directory not found'"
           echo 'Building Docker image...'
-          sh "docker -H ${DOCKER_HOST} build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+          sh "docker -H ${DOCKER_HOST} build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
           sh "docker -H ${DOCKER_HOST} tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
           echo 'Verifying image was created...'
           sh "docker -H ${DOCKER_HOST} images | grep ${DOCKER_IMAGE} || echo 'Image not found!'"
+          echo 'Checking if tests are in the image...'
+          sh "docker -H ${DOCKER_HOST} run --rm ${DOCKER_IMAGE}:${DOCKER_TAG} ls -la /app/tests/ || echo 'Tests not found in image'"
         }
 
       }
