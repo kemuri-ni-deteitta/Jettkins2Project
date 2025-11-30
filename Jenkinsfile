@@ -1,6 +1,17 @@
 pipeline {
   agent any
   stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+        script {
+          sh 'pwd'
+          sh 'ls -la'
+          sh 'test -f Dockerfile && echo "Dockerfile found" || echo "Dockerfile NOT found"'
+        }
+      }
+    }
+    
     stage('Build') {
       steps {
         script {
