@@ -6,6 +6,4 @@ README.md
 .env
 .idea
 .vscode
-tests
-*.test.js
 
