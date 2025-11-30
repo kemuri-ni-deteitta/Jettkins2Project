@@ -1,0 +1,8 @@
+# Dockerfile для Docker in Docker (dind)
+FROM docker:dind
+
+# Установка дополнительных утилит (опционально)
+RUN apk add --no-cache \
+    bash \
+    curl
+

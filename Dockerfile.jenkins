@@ -1,0 +1,33 @@
+# Dockerfile для Jenkins с установкой Docker
+FROM jenkins/jenkins:lts
+
+# Переключение на root для установки Docker
+USER root
+
+# Установка зависимостей
+RUN apt-get update && \
+    apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release && \
+    rm -rf /var/lib/apt/lists/*
+
+# Добавление GPG ключа Docker
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Добавление репозитория Docker
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Установка Docker
+RUN apt-get update && \
+    apt-get install -y docker-ce docker-ce-cli containerd.io && \
+    rm -rf /var/lib/apt/lists/*
+
+# Добавление пользователя jenkins в группу docker
+RUN usermod -aG docker jenkins
+
+# Переключение обратно на пользователя jenkins
+USER jenkins
+
