@@ -16,7 +16,7 @@ function calculateSum(a, b) {
  * @returns {string} Приветственное сообщение
  */
 function getGreeting() {
-    return 'Привет из DevOps Jenkins!';
+    return 'CI/CD работает! Изменения применены автоматически!';
 }
 
 module.exports = {
