@@ -15,9 +15,13 @@ pipeline {
     stage('Build') {
       steps {
         script {
+          echo 'Checking connection to docker-dind...'
+          sh "docker -H ${DOCKER_HOST} version"
           echo 'Building Docker image...'
           sh "docker -H ${DOCKER_HOST} build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
           sh "docker -H ${DOCKER_HOST} tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+          echo 'Verifying image was created...'
+          sh "docker -H ${DOCKER_HOST} images | grep ${DOCKER_IMAGE} || echo 'Image not found!'"
         }
 
       }
